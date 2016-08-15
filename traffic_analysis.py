@@ -55,4 +55,8 @@ stop_time = get_time('2014-09-30T23:55:00')
 
 for report_id in data_store:
     p = filter(lambda x: start_time <= get_time(x.TIMESTAMP) <= stop_time, data_store[report_id])
-    sum([i.vehileCount for i in p])
+    count=sum([i.vehileCount for i in p])
+    if count>max_count:
+        max_count=count
+        max_report_id=report_id
+print max_report_id, max_count
