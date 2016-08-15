@@ -1,4 +1,6 @@
-import csv, os
+import csv
+import os
+from datetime import datetime
 
 data_store = {}  # {report_id: [Data objects]}
 metadata = {}  # {report_id: {key: value}}
@@ -37,8 +39,20 @@ def retreiveData(path, keys=["TIMESTAMP", "vehicleCount"]):
     pass
 
 
-# max_report_id = None
-# max_count = None
-# for report_id in data_store:
-#     p = filter(data_store[report_id], lambda x: <= Date(x.TIMESTAMP) <=)
-#     sum([i.vehileCount for i in p])
+def get_time(date_time):
+    """
+    :param date_time: example 2014-08-01T07:50:00
+    :return: example [2014, 8, 1, 7, 50, 0]
+    """
+    date_time = date_time.split('T')
+    return map(int, date_time[0].split('-') + date_time[1].split(':'))
+
+
+max_report_id = None
+max_count = None
+start_time = get_time('2014-08-01T07:50:00')
+stop_time = get_time('2014-09-30T23:55:00')
+
+for report_id in data_store:
+    p = filter(lambda x: start_time <= get_time(x.TIMESTAMP) <= stop_time, data_store[report_id])
+    sum([i.vehileCount for i in p])
