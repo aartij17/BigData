@@ -90,18 +90,14 @@
     <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-servlet:3.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.inject:guice:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-client:2.5.2" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-client:1.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-common:2.5.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-nodemanager:2.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.leveldbjni:leveldbjni-all:1.8" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-nodemanager:2.5.2" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-guice:1.9" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-guice:1.9" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-applications-unmanaged-am-launcher:2.5.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-web-proxy:2.5.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-resourcemanager:2.5.2" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-client:1.9" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-yarn-server-applicationhistoryservice:2.5.2" level="project" />
   </component>
 </module>

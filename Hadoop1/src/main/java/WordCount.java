@@ -17,6 +17,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
 public class WordCount {
+    static String cont = "";
     public static class TokenizerMapper
             extends Mapper<Object, Text, Text, IntWritable>{
 
@@ -25,8 +26,10 @@ public class WordCount {
 
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
-            System.out.println(value);
-            System.out.println(key);
+            if(!cont.equals(context.toString())) {
+                cont = context.toString();
+                System.out.println(cont);
+            }
             StringTokenizer itr = new StringTokenizer(value.toString().replace("\n",""));
             while (itr.hasMoreTokens()) {
                 word.set(itr.nextToken());
@@ -34,8 +37,25 @@ public class WordCount {
             }
         }
     }
-
+    static int count=0;
     public static class IntSumReducer
+            extends Reducer<Text,IntWritable,Text,IntWritable> {
+        private IntWritable result = new IntWritable();
+
+        public void reduce(Text key, Iterable<IntWritable> values,
+                           Context context
+        ) throws IOException, InterruptedException {
+
+            int sum = 0;
+            for (IntWritable val : values) {
+                count+=1;
+                sum += val.get();
+            }
+            result.set(sum);
+            context.write(key, result);
+        }
+    }
+    public static class IntSumCombiner
             extends Reducer<Text,IntWritable,Text,IntWritable> {
         private IntWritable result = new IntWritable();
 
@@ -59,7 +79,7 @@ public class WordCount {
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(TokenizerMapper.class);
-        job.setCombinerClass(IntSumReducer.class);
+        //job.setCombinerClass(IntSumCombiner.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -74,6 +94,7 @@ public class WordCount {
         }
         FileOutputFormat.setOutputPath(job,outPath);
         job.waitForCompletion(true);
+        System.out.println(count);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }
