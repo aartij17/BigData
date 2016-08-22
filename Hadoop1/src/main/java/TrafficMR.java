@@ -55,6 +55,7 @@ public class TrafficMR {
             try {
                 if(values[TIMESTAMP].equals("TIMESTAMP"))
                     return;
+
                 Date inputDate = DateUtils.parseDate(values[TIMESTAMP].replace("T","-"),pattern);
                 if(inputDate.after(start) && inputDate.before(end))
                 {
