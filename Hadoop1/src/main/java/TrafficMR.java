@@ -46,11 +46,11 @@ public class TrafficMR {
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
 
-            if(!cont.equals((context.getInputSplit()).toString())) {
+            /*if(!cont.equals((context.getInputSplit()).toString())) {
                 //cont = context.toString();
                 cont = ( context.getInputSplit()).toString();
                 System.out.println(cont);
-            }
+            }*/
             String[] values = value.toString().split(",");
             try {
                 if(values[TIMESTAMP].equals("TIMESTAMP"))
@@ -115,12 +115,13 @@ public class TrafficMR {
     public static void main(String[] args) throws Exception {
         start=DateUtils.parseDate("2014-08-01T00:00:00".replace("T","-"),pattern);
         end=DateUtils.parseDate("2014-08-31T23:59:59".replace("T","-"),pattern);
-
+        Date date=new Date();
+        long startTime=date.getTime();
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "trafficMR");
-        job.setJarByClass(WordCount.class);
+        job.setJarByClass(TrafficMR.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(IntSumCombiner.class);
         job.setReducerClass(IntSumReducer.class);
@@ -137,7 +138,9 @@ public class TrafficMR {
         }
         FileOutputFormat.setOutputPath(job,outPath);
         job.waitForCompletion(true);
-
+        date=new Date();
+        long endTime=date.getTime();
+        System.out.println("Time taken : "+(endTime-startTime));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

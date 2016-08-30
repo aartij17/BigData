@@ -124,7 +124,7 @@ public class PollutionMR {
         LogManager.getRootLogger().setLevel(Level.OFF);
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "pollutionMR");
-        job.setJarByClass(WordCount.class);
+        job.setJarByClass(PollutionMR.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(IntSumCombiner.class);
         job.setReducerClass(IntSumReducer.class);
@@ -140,7 +140,9 @@ public class PollutionMR {
             fs.delete(outPath,true);
         }
         FileOutputFormat.setOutputPath(job,outPath);
+        long l = System.currentTimeMillis();
         job.waitForCompletion(true);
+        System.out.println("Time taken : "+(System.currentTimeMillis()-l));
         Collections.sort(results, new Comparator<Pair<Integer,
                         Integer>>() {
             public int compare(Pair<Integer, Integer> o1, Pair<Integer, Integer> o2) {

@@ -24,6 +24,7 @@ public class HdfsReader extends Configured implements Tool{
         {
             System.out.println("Usage: [HDFSpath_of_file_to_read]");
         }
+
         //Setup URI of the file path (base + path given)
         URI uri= URI.create(BASE_URI+args[0]);
         Path outputPath = new Path(uri);

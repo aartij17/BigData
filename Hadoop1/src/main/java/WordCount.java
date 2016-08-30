@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Iterables;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -30,6 +31,8 @@ public class WordCount {
                 cont = context.toString();
                 System.out.println(cont);
             }
+            String[] split = value.toString().split(",");
+
             StringTokenizer itr = new StringTokenizer(value.toString().replace("\n",""));
             while (itr.hasMoreTokens()) {
                 word.set(itr.nextToken());
@@ -62,24 +65,23 @@ public class WordCount {
         public void reduce(Text key, Iterable<IntWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
-            int sum = 0;
-            for (IntWritable val : values) {
-                sum += val.get();
-            }
+            int sum = Iterables.size(values);
+
             result.set(sum);
             context.write(key, result);
         }
     }
     private static final String BASE_URI="hdfs://localhost:9000/";
     public static void main(String[] args) throws Exception {
-
+        long l = System.currentTimeMillis();
         BasicConfigurator.configure();
         LogManager.getRootLogger().setLevel(Level.OFF);
         Configuration conf = new Configuration();
+        
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(TokenizerMapper.class);
-        //job.setCombinerClass(IntSumCombiner.class);
+        job.setCombinerClass(IntSumCombiner.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -93,8 +95,10 @@ public class WordCount {
             fs.delete(outPath,true);
         }
         FileOutputFormat.setOutputPath(job,outPath);
+
         job.waitForCompletion(true);
-        System.out.println(count);
+        System.out.println("Time taken : "+(System.currentTimeMillis()-l));
+        System.out.println("Number of reduces performed : "+count);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
 }

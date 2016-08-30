@@ -4,6 +4,7 @@
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.directory.api.util.Strings;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -42,11 +43,13 @@ public class HdfsWriter extends Configured implements Tool{
         return 0;
     }
     public int run(String args[]) throws Exception{
-        String inputDir=args[0];
-        String outputDir=args[1];
+        String inputDir=args[0];    // dataset
+        String outputDir=args[1];   // files/trafficinputs
         System.out.println(inputDir);
-        for(File file:FileUtils.listFiles(new File(inputDir),new String[]{"csv"},true))
+
+        for(File file:FileUtils.listFiles(new File(inputDir), null,true))
         {
+            System.out.println(file);
             writeToHDFS(file,outputDir);
         }
         return 0;
