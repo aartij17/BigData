@@ -25,7 +25,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
 public class PageRankMR {
-
+    private static final double THRESHOLD = 0.00001;
     static double[] curr,prev;
     public static class TokenizerMapper
             extends Mapper<Object, Text, IntWritable, DoubleWritable>{
@@ -63,7 +63,7 @@ public class PageRankMR {
     }
 
     static Job multiply() throws IOException {
-        String args[]={"data/matrices","data/outputs"};
+        String args[]={"files/mm2","files/outmm2"};
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "PageRankMR");
         job.setJarByClass(WordCount.class);
@@ -85,16 +85,16 @@ public class PageRankMR {
     }
     static boolean copy= false;
     static void computeConvergence() throws IOException, ClassNotFoundException, InterruptedException {
-        System.out.println("-----");
-        System.out.println(Arrays.toString(curr));
-        System.out.println(Arrays.toString(prev));
+        //System.out.println("-----");
+        //System.out.println(Arrays.toString(curr));
+        //System.out.println(Arrays.toString(prev));
         double convergence = 0;
         for(int i=0;i<prev.length;i++)
             convergence += Math.abs(prev[i]-curr[i]);
 
-        if(convergence<Math.pow(10,-12))
+        if(convergence<THRESHOLD)
         {
-            System.out.println(Arrays.toString(curr));
+            //System.out.println(Arrays.toString(curr));
         }
         else
         {
@@ -109,12 +109,12 @@ public class PageRankMR {
 
     }
     private static final String BASE_URI="hdfs://localhost:9000/";
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        curr = new double[4];
-        prev = new double[4];
+    public static void compute(int dim) throws IOException, ClassNotFoundException, InterruptedException {
+        curr = new double[dim];
+        prev = new double[dim];
         prev[0]/*=prev[1]=prev[2]=prev[3]*/=1.0;
-        BasicConfigurator.configure();
-        LogManager.getRootLogger().setLevel(Level.OFF);
+        //BasicConfigurator.configure();
+        //LogManager.getRootLogger().setLevel(Level.OFF);
         computeConvergence();
     }
 }

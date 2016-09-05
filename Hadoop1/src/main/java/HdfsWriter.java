@@ -38,18 +38,23 @@ public class HdfsWriter extends Configured implements Tool{
             content=content+content;
         }
         InputStream is = new BufferedInputStream(new ByteArrayInputStream(content.getBytes("UTF-8")));
-        IOUtils.copyBytes(is, os, conf);
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = is.read(buffer)) != -1) {
+            os.write(buffer, 0, len);
+        }
+        //IOUtils.copyBytes(is, os, conf);
         System.out.println("Written");
         return 0;
     }
     public int run(String args[]) throws Exception{
         String inputDir=args[0];    // dataset
         String outputDir=args[1];   // files/trafficinputs
-        System.out.println(inputDir);
+        //System.out.println(inputDir);
 
         for(File file:FileUtils.listFiles(new File(inputDir), null,true))
         {
-            System.out.println(file);
+            //System.out.println(file);
             writeToHDFS(file,outputDir);
         }
         return 0;
@@ -63,7 +68,14 @@ public class HdfsWriter extends Configured implements Tool{
         FileSystem fs =FileSystem.get(uri,conf);
         OutputStream os = fs.create(outputPath);
         InputStream is = new BufferedInputStream(new ByteArrayInputStream(content.getBytes("UTF-8")));
-        IOUtils.copyBytes(is, os, conf);
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = is.read(buffer)) != -1) {
+            os.write(buffer, 0, len);
+        }
+        is.close();
+        os.close();
+        fs.close();
     }
     public static void main( String[] args ) throws Exception {
         int returnCode = ToolRunner.run(new HdfsWriter(), args);
