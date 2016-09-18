@@ -71,5 +71,6 @@ Installing Hive :
 19) Open $HIVE_HOME/conf/hive-site.xml and replace all occurrences of ${system:java.io.tmpdir}/${system:user.name} by /tmp/mydir
 19) Start hive -
 	$ cd $HIVE_HOME
+	$ schematool -initSchema -dbType derby
 	$ bin/hive
 
